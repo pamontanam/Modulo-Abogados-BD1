@@ -1,0 +1,257 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                    SCHEMA DE BASE DE DATOS ORACLE                         ║
+║              Tablas Principales para Gestión de Casos                      ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+TABLAS PRINCIPALES:
+═══════════════════════════════════════════════════════════════════════════
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ CLIENTE                                                                │
+├────────────────────────────────────────────────────────────────────────┤
+│ codCliente (PK)        VARCHAR2(5)      │ Código único del cliente    │
+│ nomCliente             VARCHAR2(30)     │ Nombre                      │
+│ apellCliente           VARCHAR2(30)     │ Apellido                    │
+│ nDocumento             VARCHAR2(15)     │ Número de documento único   │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ ESPECIALIZACIÓN                                                        │
+├────────────────────────────────────────────────────────────────────────┤
+│ codEspecializacion (PK) VARCHAR2(3)     │ Código especialización     │
+│ nomEspecializacion      VARCHAR2(30)    │ Nombre (Civil, Penal, etc.)│
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ ABOGADO                                                                │
+├────────────────────────────────────────────────────────────────────────┤
+│ cedula (PK)            VARCHAR2(10)     │ Cédula del abogado        │
+│ nombre                 VARCHAR2(30)     │ Nombre                    │
+│ apellido               VARCHAR2(30)     │ Apellido                  │
+│ nTarjetaProfesional    VARCHAR2(5)      │ Número tarjeta profesional│
+│ codEspecializacion (FK) VARCHAR2(3)     │ Especialización del abogado
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ CASO                                                                   │
+├────────────────────────────────────────────────────────────────────────┤
+│ noCaso (PK)            NUMBER(5,0)      │ Número de caso (consecutivo)
+│ fechaInicio (FK)       DATE             │ Fecha de inicio            │
+│ fechaFin               DATE (NULL)      │ Fecha de cierre (nullable) │
+│ valor                  VARCHAR2(10)     │ Valor del caso             │
+│ codEspecializacion (FK) VARCHAR2(3)     │ Especialización del caso   │
+│ codCliente (FK)        VARCHAR2(5)      │ Cliente asociado           │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ ETAPA PROCESAL                                                         │
+├────────────────────────────────────────────────────────────────────────┤
+│ codEtapa (PK)         VARCHAR2(3)       │ Código de etapa (1, 2, 3...)
+│ nomEtapa              VARCHAR2(30)      │ Nombre (Demanda, Contestación)
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ EXPEDIENTE                                                             │
+├────────────────────────────────────────────────────────────────────────┤
+│ consecExpe (PK)       NUMBER(4,0)       │ Número expediente (consec.)│
+│ noCaso (FK)           NUMBER(5,0)       │ Caso asociado              │
+│ codEtapa (FK)         VARCHAR2(3)       │ Etapa procesal actual      │
+│ fechaEtapa            DATE              │ Fecha de la etapa          │
+│ cedAbogado (FK)       VARCHAR2(10)      │ Abogado asignado           │
+│ codLugar (FK)         VARCHAR2(5)       │ Ubicación/Juzgado         │
+│ nInstancia            NUMBER(1,0) (NULL)│ Instancia (1=Primera, 2=Segunda)
+│ idImpugna (FK)        VARCHAR2(2) (NULL)│ Tipo de impugnación        │
+│ conSuceso             VARCHAR2(4000)    │ Descripción del suceso     │
+│ conResul              VARCHAR2(4000)    │ Resultado de la etapa      │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ LUGAR                                                                  │
+├────────────────────────────────────────────────────────────────────────┤
+│ codLugar (PK)         VARCHAR2(5)       │ Código de lugar/ciudad     │
+│ nomLugar              VARCHAR2(30)      │ Nombre de la ciudad        │
+│ direLugar             VARCHAR2(40)      │ Dirección                  │
+│ telLugar              VARCHAR2(15)      │ Teléfono                   │
+│ emailLugar            VARCHAR2(50)      │ Email                      │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ IMPUGNACIÓN                                                            │
+├────────────────────────────────────────────────────────────────────────┤
+│ idImpugna (PK)        VARCHAR2(2)       │ Código de impugnación      │
+│ nomImpugna            VARCHAR2(30)      │ Nombre (Apelación, Casación)
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ SUCESO                                                                 │
+├────────────────────────────────────────────────────────────────────────┤
+│ conSuceso (PK)        NUMBER(4,0)       │ Número consecutivo         │
+│ descSuceso            VARCHAR2(200)     │ Descripción del suceso     │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ RESULTADO                                                              │
+├────────────────────────────────────────────────────────────────────────┤
+│ conResul (PK)         NUMBER(4,0)       │ Número consecutivo         │
+│ descResul             VARCHAR2(200)     │ Descripción del resultado  │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ DOCUMENTO                                                              │
+├────────────────────────────────────────────────────────────────────────┤
+│ conDoc (PK)           NUMBER(4,0)       │ Número consecutivo         │
+│ ubicaDoc              VARCHAR2(50)      │ Ubicación/ruta del archivo │
+└────────────────────────────────────────────────────────────────────────┘
+
+OTRAS TABLAS (Catálogos):
+════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────┐  ┌──────────────────┐  ┌───────────────────┐
+│ TIPO DOCUMENTO      │  │ TIPO CONTACTO    │  │ TIPO LUGAR        │
+├─────────────────────┤  ├──────────────────┤  ├───────────────────┤
+│ idTipoDoc (PK)      │  │ idTipoConta (PK) │  │ idTipoLugar (PK)  │
+│ descTipoDoc         │  │ descTipoConta    │  │ descTipoLugar     │
+└─────────────────────┘  └──────────────────┘  └───────────────────┘
+
+┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐
+│ FORMA DE PAGO    │  │ FRANQUICIA       │  │ INSTANCIA        │
+├──────────────────┤  ├──────────────────┤  ├──────────────────┤
+│ idFormaPago (PK) │  │ codFranquicia(PK)│  │ nInstancia (PK)  │
+│ descFormaPago    │  │ nomFranquicia    │  │                  │
+└──────────────────┘  └──────────────────┘  └──────────────────┘
+
+┌──────────────────────────┐
+│ CONTACTO                 │
+├──────────────────────────┤
+│ conseContacto (PK)       │
+│ valorContacto            │
+│ notificacion (BOOLEAN)   │
+└──────────────────────────┘
+
+┌──────────────────────────┐
+│ PAGO                     │
+├──────────────────────────┤
+│ consecPago (PK)          │
+│ fechaPago                │
+│ valorPago                │
+│ nTarjeta                 │
+└──────────────────────────┘
+
+RELACIONES (Claves Foráneas):
+════════════════════════════════════════════════════════════════════════
+
+CLIENTE ←──── CASO
+  │            │
+  │            ├──→ ESPECIALIZACIÓN
+  │            └──→ EXPEDIENTE ─→ ETAPA PROCESAL
+  │                     │             │
+  │                     ├──→ ABOGADO  └─→ IMPUGNACIÓN
+  │                     ├──→ LUGAR
+  │                     └──→ SUCESO/RESULTADO
+
+VISTAS DE DATOS EN INTERFAZ:
+════════════════════════════════════════════════════════════════════════
+
+BÚSQUEDA DE CLIENTE:
+  SELECT codCliente, nomCliente, apellCliente, nDocumento
+  FROM Cliente
+  WHERE UPPER(nomCliente) LIKE UPPER(:nombre || '%')
+  AND UPPER(apellCliente) LIKE UPPER(:apellido || '%')
+
+CASOS ACTIVOS DEL CLIENTE:
+  SELECT noCaso, fechaInicio, valor, codEspecializacion
+  FROM Caso
+  WHERE codCliente = :codCliente
+  AND fechaFin IS NULL
+  ORDER BY noCaso DESC
+
+ABOGADOS POR ESPECIALIZACIÓN:
+  SELECT cedula, nombre, apellido, nTarjetaProfesional
+  FROM Abogado
+  WHERE codEspecializacion = :codEspecializacion
+
+EXPEDIENTES DE UN CASO:
+  SELECT consecExpe, noCaso, fechaEtapa
+  FROM Expediente
+  WHERE noCaso = :noCaso
+  ORDER BY consecExpe
+
+TIPOS DE DATOS ORACLE:
+════════════════════════════════════════════════════════════════════════
+
+VARCHAR2(n)     = Cadena de caracteres (hasta n caracteres)
+NUMBER(n,d)     = Número (n dígitos totales, d decimales)
+DATE            = Fecha y hora
+BOOLEAN         = Verdadero/Falso
+CLOB            = Texto largo (hasta 4GB)
+
+ÍNDICES PRINCIPALES (Para Performance):
+════════════════════════════════════════════════════════════════════════
+
+CREATE INDEX idx_cliente_doc ON Cliente(nDocumento);
+CREATE INDEX idx_caso_cliente ON Caso(codCliente);
+CREATE INDEX idx_caso_activos ON Caso(codCliente, fechaFin);
+CREATE INDEX idx_expediente_caso ON Expediente(noCaso);
+CREATE INDEX idx_abogado_esp ON Abogado(codEspecializacion);
+
+RESTRICCIONES DE INTEGRIDAD:
+════════════════════════════════════════════════════════════════════════
+
+PRIMARY KEY (PK)      = Identifica únicamente cada registro
+FOREIGN KEY (FK)      = Asegura referencia a tabla relacionada
+NOT NULL              = Campo obligatorio
+UNIQUE                = Valores únicos en la columna
+CHECK                 = Validar rango de valores
+
+TRANSACCIONES EN OPERACIONES CRÍTICAS:
+════════════════════════════════════════════════════════════════════════
+
+BEGIN TRANSACTION
+  INSERT INTO Caso (...)
+  INSERT INTO Expediente (...)
+  INSERT INTO Suceso (...)
+COMMIT               -- Si todo está bien
+ROLLBACK             -- Si hay error
+
+VOLÚMENES ESPERADOS DE DATOS:
+════════════════════════════════════════════════════════════════════════
+
+Clientes:           100 - 1,000
+Abogados:           10 - 100
+Casos:              100 - 10,000
+Expedientes:        200 - 50,000
+Etapas por caso:    3 - 8
+Documentos:         1,000 - 100,000
+
+═══════════════════════════════════════════════════════════════════════════
+
+EJEMPLO DE INSERCIÓN COMPLETA:
+══════════════════════════════════════════════════════════════════════════
+
+1. Insertar Cliente:
+   INSERT INTO Cliente (codCliente, nomCliente, apellCliente, nDocumento)
+   VALUES ('1', 'Juan', 'Pérez', '1234567890')
+
+2. Insertar Caso:
+   INSERT INTO Caso (noCaso, fechaInicio, valor, codEspecializacion, codCliente)
+   VALUES (1, SYSDATE, '1000000', '1', '1')
+
+3. Insertar Expediente:
+   INSERT INTO Expediente (consecExpe, noCaso, codEtapa, fechaEtapa, cedAbogado, codLugar)
+   VALUES (1, 1, '1', SYSDATE, '1234567', '001')
+
+4. Actualizar Expediente:
+   UPDATE Expediente
+   SET conSuceso = 'Se presentó demanda',
+       conResul = 'Admitida'
+   WHERE consecExpe = 1
+
+═══════════════════════════════════════════════════════════════════════════
+
+Para más detalles, consulta:
+- README.md (sección base de datos)
+- ARQUITECTURA.md (sección modelos de datos)
+- src/db/initDB.sql (scripts de creación)
+- src/db/inserts.sql (datos de ejemplo)
+
+═══════════════════════════════════════════════════════════════════════════

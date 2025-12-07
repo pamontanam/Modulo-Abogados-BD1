@@ -1,86 +1,193 @@
-# Gabinete de Abogados – Proyecto de Base de Datos
+﻿# Sistema de Gestión de Casos y Expedientes  Gabinete de Abogados
 
-Proyecto académico para el diseño e implementación de la base de datos de un **gabinete de abogados**, incluyendo modelado conceptual, lógico y físico, así como los scripts SQL para creación e inserción de datos en Oracle 12c.
+Sistema web completo para la gestión de casos y expedientes de un gabinete de abogados, desarrollado con **FastAPI** (Python) en el backend, **HTML5/CSS3/JavaScript** en el frontend, y **Oracle** como base de datos.
 
-## Contenido del repositorio
+## Descripción
 
-- `doc/`
-  - Documentación general del módulo/proyecto (apuntes, entregables, etc.).
-- `gabinete_abogados_powerdesigner/`
-  - `Conceptual.cdm` / `Conceptual.cdb`: modelo conceptual del dominio (gabinete de abogados).
-  - `Logico.ldm`: modelo lógico de datos.
-  - `Fisico.pdm`: modelo físico de la base de datos.
-  - Archivos de proyecto de PowerDesigner (`*.pjb`, `*.prj`).
-- `src/`
-  - `db/`
-    - `initDB.sql`: script de **creación y reseteo** de la base de datos en Oracle 12c. Incluye:
-      - Eliminación de restricciones y tablas existentes (si las hay).
-      - Creación de tablas principales: `ABOGADO`, `CLIENTE`, `CASO`, `EXPEDIENTE`, `LUGAR`, `PAGO`, `RESULTADO`, `SUCESO`, `ESPECIALIZACION`, `ETAPAPROCESAL`, `ESPECIA_ETAPA`, `TIPODOCUMENTO`, `TIPOCONTACT`, `TIPOLUGAR`, `FORMAPAGO`, `FRANQUICIA`, `IMPUGNACION`, `INSTANCIA`, entre otras.
-      - Creación de índices y restricciones de integridad (claves primarias y foráneas).
-    - `inserts.sql`: script de **carga de datos de ejemplo**, que inserta registros en:
-      - Tablas de catálogos: `TIPOCONTACT`, `TIPODOCUMENTO`, `TIPOLUGAR`, `FORMAPAGO`, `FRANQUICIA`, `ESPECIALIZACION`, `ETAPAPROCESAL`, `IMPUGNACION`, `INSTANCIA`.
-      - Tabla de relación de etapas por especialización: `ESPECIA_ETAPA` (flujos procesales por tipo de caso: civil, penal, laboral).
-      - Tablas de negocio: `ABOGADO`, `CLIENTE`, `LUGAR` (ciudades, juzgados, tribunales) y otros datos base para casos/expedientes.
-  - `backend/` y `frontend/`
-    - Directorios reservados para futuras implementaciones de backend y frontend (actualmente sólo contienen archivos de ejemplo).
+Este proyecto incluye:
+- Backend REST API con FastAPI para gestión de clientes, casos y expedientes
+- Frontend web responsivo con interfaz moderna e intuitiva
+- Conexión directa a Oracle sin ORMs (para máximo control de BD)
+- Documentación automática de API con Swagger
+- Módulo de Gestión de Caso y Módulo de Gestión de Expediente
 
-## Objetivo del modelo
+## Guía de Instalación Completa
 
-La base de datos modela la operación de un gabinete de abogados, permitiendo registrar:
+ Crea un entorno virtual de Python:
 
-- **Abogados** y sus especializaciones.
-- **Clientes** y sus datos de contacto.
-- **Casos** asociados a clientes y especialidades del derecho.
-- **Expedientes** vinculados a casos, abogados, lugares (juzgados/tribunales) y resultados.
-- **Pagos** y formas de pago (incluyendo franquicias de tarjetas).
-- **Etapas procesales** e **instancias** del proceso judicial, con posibles recursos de impugnación.
-- **Lugares** jerárquicos (ciudad → juzgado/tribunal).
+```powershell
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+```
 
-## Requisitos
+Si tienes problemas de ejecución de scripts, ejecuta:
 
-- **DBMS**: Oracle Database 12c (o compatible).
-- Usuario con permisos para crear y eliminar tablas, índices y restricciones en el esquema de trabajo.
-- Cliente SQL (SQL*Plus, SQL Developer, DBeaver, etc.).
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
 
-## Instrucciones de uso
+4. Instala las dependencias del backend:
 
-1. Conectarse a la base de datos Oracle 12c con el usuario/esquema deseado.
-2. Ejecutar el script de inicialización de esquema:
+```powershell
+cd src/backend
+pip install -r requirements.txt
+```
 
-   ```sql
-   @src/db/initDB.sql
-   ```
+### Paso 3: Configurar Credenciales de Oracle
 
-3. Ejecutar el script de inserción de datos de ejemplo:
+Edita `src/backend/main.py` y localiza la sección de configuración de base de datos (aproximadamente líneas 10-20).
 
-   ```sql
-   @src/db/inserts.sql
-   ```
+Actualiza las credenciales:
 
-4. Verificar las tablas y datos, por ejemplo:
+```python
+DATABASE_CONFIG = {
+    "user": "tu_usuario_oracle",
+    "password": "tu_contraseña_oracle",
+    "dsn": "tu_host:1521/tu_servicio"
+}
+```
 
-   ```sql
-   SELECT * FROM ABOGADO;
-   SELECT * FROM CLIENTE;
-   SELECT * FROM CASO;
-   ```
+Reemplaza los siguientes valores con los de tu instancia Oracle:
+- `tu_usuario_oracle`: Usuario de tu base de datos Oracle
+- `tu_contraseña_oracle`: Contraseña del usuario
+- `tu_host`: Dirección del servidor Oracle (ej: localhost o 192.168.1.100)
+- `tu_servicio`: Nombre del servicio Oracle (ej: ORCL, XE)
 
-## Estructura lógica principal
+### Paso 4: Inicializar la Base de Datos (Opcional)
 
-A alto nivel, el modelo incluye:
+Si necesitas crear las tablas desde cero:
 
-- `ABOGADO` ↔ `ESPECIALIZACION` (por `ESPECIALIZACION_ABOGADO`).
-- `CLIENTE` ↔ `CASO` ↔ `EXPEDIENTE`.
-- `EXPEDIENTE` ↔ `LUGAR` (juzgado/tribunal) y `RESULTADO`.
-- `PAGO` asociado a `FORMAPAGO` y `FRANQUICIA`.
-- Flujos procesales por especialidad en `ESPECIA_ETAPA`, vinculando `ESPECIALIZACION`, `ETAPAPROCESAL`, `IMPUGNACION` e `INSTANCIA`.
+1. Conéctate a tu instancia Oracle usando SQL*Plus o SQL Developer
+2. Ejecuta el script de creación:
 
-## Trabajo futuro
+```sql
+@src/db/initDB.sql
+```
 
-- Implementar capa de **backend** (APIs) para gestionar casos, clientes y expedientes.
-- Implementar interfaz **frontend** para consulta y administración de la información.
-- Añadir scripts adicionales de **consultas, vistas, procedimientos almacenados** y casos de prueba.
+3. Carga los datos de prueba:
 
-## Autores
+```sql
+@src/db/inserts.sql
+```
 
-- Proyecto desarrollado como parte del módulo de **Bases de Datos I** (Gabinete de Abogados).
+**Nota:** Si la base de datos ya existe, omite este paso.
+
+## Ejecución del Sistema
+
+### Iniciar el Backend (FastAPI)
+
+Desde la carpeta raíz del proyecto:
+
+```powershell
+cd src/backend
+python main.py
+```
+
+El servidor estará disponible en: **http://localhost:8000**
+
+Para ver la documentación interactiva de la API (Swagger UI):
+- Abre en tu navegador: **http://localhost:8000/docs**
+
+### Iniciar el Frontend
+
+En una nueva ventana de PowerShell (desde la carpeta raíz):
+
+```powershell
+cd src/frontend
+python -m http.server 8001
+```
+
+El frontend estará disponible en: **http://localhost:8001**
+
+**Importante:** Asegúrate de que ambos servidores (backend en 8000 y frontend en 8001) estén corriendo simultáneamente.
+
+## Estructura de Endpoints API
+
+### Clientes
+- `GET /api/clientes` - Listar todos los clientes
+- `GET /api/clientes/{id}` - Obtener cliente por ID
+- `POST /api/clientes` - Crear nuevo cliente
+- `PUT /api/clientes/{id}` - Actualizar cliente
+
+### Casos
+- `GET /api/casos` - Listar todos los casos
+- `GET /api/casos/{id}` - Obtener caso por ID
+- `POST /api/casos` - Crear nuevo caso
+- `PUT /api/casos/{id}` - Actualizar caso
+
+### Expedientes
+- `GET /api/expedientes` - Listar expedientes
+- `GET /api/expedientes/{codEspecializacion}/{pasoEtapa}/{noCaso}/{consecExpe}` - Obtener expediente (clave compuesta)
+- `POST /api/expedientes` - Crear nuevo expediente
+
+### Sucesos
+- `GET /api/sucesos` - Listar sucesos
+- `POST /api/sucesos` - Crear suceso
+- `PUT /api/sucesos/{id}` - Actualizar suceso
+
+### Resultados
+- `GET /api/resultados` - Listar resultados
+- `POST /api/resultados` - Crear resultado
+- `PUT /api/resultados/{id}` - Actualizar resultado
+
+### Documentos
+- `GET /api/documentos` - Listar documentos
+- `POST /api/documentos` - Subir documento
+- `DELETE /api/documentos/{id}` - Eliminar documento
+
+**Nota:** Algunos expedientes usan claves compuestas (codEspecializacion, pasoEtapa, noCaso, consecExpe).
+
+## Notas Técnicas Importantes
+
+### Claves Compuestas
+La tabla EXPEDIENTE usa una clave primaria compuesta de 4 campos. Cuando consultes o actualices un expediente, necesitarás proporcionar todos 4 valores:
+- `codEspecializacion`
+- `pasoEtapa`
+- `noCaso`
+- `consecExpe`
+
+### Numeración Automática
+El sistema genera automáticamente:
+- Números de caso (`noCaso`)
+- Consecutivos de suceso, resultado y documento dentro de cada expediente
+
+### Conexión a Oracle
+El backend usa `oracledb` (cliente nativo de Oracle) sin ORM. Esto permite:
+- Mayor control sobre queries SQL
+- Mejor rendimiento
+- Acceso directo a stored procedures si es necesario
+
+## Solución de Problemas
+
+### "ModuleNotFoundError: No module named 'oracledb'"
+- Asegúrate de haber activado el entorno virtual: `.\venv\Scripts\Activate.ps1`
+- Reinstala dependencias: `pip install -r requirements.txt`
+
+### "ORA-12154: TNS:could not resolve the connect identifier specified"
+- Verifica que Oracle Instant Client esté en: `C:\oracle\instantclient_23_9`
+- Revisa que la variable `dsn` en `main.py` sea correcta
+
+### El frontend no se conecta al backend
+- Verifica que el backend esté corriendo en `http://localhost:8000`
+- Revisa la consola del navegador (F12) para ver errores de CORS o conexión
+
+### Puerto 8000 o 8001 ya está en uso
+```powershell
+# Para cambiar el puerto del backend, edita main.py:
+# uvicorn.run(app, host="0.0.0.0", port=9000)
+
+# Para cambiar el puerto del frontend:
+python -m http.server 9001
+```
+
+## Recursos Adicionales
+
+- Documentación ER: Ver archivos en `doc/` y `gabinete_abogados_powerdesigner/`
+- Modelos: Archivos .cdm, .ldm, .pdm en PowerDesigner
+- Scripts SQL: `src/db/initDB.sql` y `src/db/inserts.sql`
+
+## Versión y Licencia
+
+- Versión: 1.0
+- Proyecto: Gestión de Casos Legales - Gabinete de Abogados
+- Año: 2025

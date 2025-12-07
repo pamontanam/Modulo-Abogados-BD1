@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Casos y Expedientes</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- ENCABEZADO -->
+        <header class="header">
+            <h1>Sistema de Gestión de Casos y Expedientes</h1>
+        </header>
+
+        <!-- PESTAÑA SELECTOR (CASO/EXPEDIENTE) -->
+        <div class="tab-selector">
+            <button class="tab-btn active" data-tab="caso">Caso</button>
+            <button class="tab-btn" data-tab="expediente">Expediente</button>
+        </div>
+
+        <!-- ===================================== -->
+        <!-- PESTAÑA: CASO                        -->
+        <!-- ===================================== -->
+        <div id="caso" class="tab-content active">
+            <div class="caso-container">
+                <!-- COLUMNA IZQUIERDA: DATOS DEL CASO -->
+                <div class="columna izquierda">
+                    <div class="form-group">
+                        <label for="noCaso">No. Caso:</label>
+                        <div class="input-group">
+                            <input type="text" id="noCaso" disabled>
+                            <button id="btnCrearCaso" class="btn-icon">Crear</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fechaInicio">Fecha Inicio:</label>
+                        <div class="input-group">
+                            <input type="date" id="fechaInicio" disabled>
+                            <span class="calendar-icon">📅</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fechaFin">Fecha Fin:</label>
+                        <div class="input-group">
+                            <input type="date" id="fechaFin" disabled>
+                            <span class="calendar-icon">📅</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="especializacion">Especialización:</label>
+                        <input type="text" id="especializacion" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="valor">Valor:</label>
+                        <input type="text" id="valor" disabled>
+                    </div>
+
+                    <button id="btnAcuerdoPago" class="btn-secondary" disabled>Acuerdo Pago</button>
+                </div>
+
+                <!-- COLUMNA DERECHA: DATOS DEL CLIENTE -->
+                <div class="columna derecha">
+                    <div class="form-group">
+                        <label for="nombreApellidoCliente">Cliente:</label>
+                        <input type="text" id="nombreApellidoCliente" placeholder="Nombre y Apellido">
+                    </div>
+
+                    <div class="input-group-buttons">
+                        <button id="btnBuscarCliente" class="btn-search">🔍 Buscar</button>
+                        <button id="btnCrearCliente" class="btn-secondary" disabled>Crear</button>
+                    </div>
+
+                    <div id="resultadosBusquedaCliente" class="resultados-busqueda">
+                        <!-- Se llenará dinámicamente -->
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nDocumento">No. Documento:</label>
+                        <input type="text" id="nDocumento" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="casosActivos">Otros Casos Activos:</label>
+                        <select id="casosActivos" disabled>
+                            <option value="">-- Seleccionar --</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOTÓN GUARDAR CASO (ABAJO) -->
+            <div class="button-group bottom">
+                <button id="btnGuardarCaso" class="btn-primary" disabled>Guardar</button>
+            </div>
+        </div>
+
+        <!-- ===================================== -->
+        <!-- PESTAÑA: EXPEDIENTE                  -->
+        <!-- ===================================== -->
+        <div id="expediente" class="tab-content">
+            <div class="expediente-container">
+                <!-- COLUMNA IZQUIERDA: DATOS EXPEDIENTE -->
+                <div class="columna izquierda">
+                    <div class="form-group">
+                        <label for="consecExpe">No. Expediente:</label>
+                        <div class="input-group">
+                            <input type="text" id="consecExpe" disabled>
+                            <button id="btnCrearExpediente" class="btn-icon" disabled>Crear</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="noEtapa">No. Etapa:</label>
+                        <input type="text" id="noEtapa" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fechaEtapa">Fecha Etapa:</label>
+                        <div class="input-group">
+                            <input type="date" id="fechaEtapa" disabled>
+                            <span class="calendar-icon">📅</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nomEtapa">Nombre Etapa:</label>
+                        <input type="text" id="nomEtapa" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="instancia">Instancia:</label>
+                        <input type="text" id="instancia" disabled>
+                    </div>
+                </div>
+
+                <!-- COLUMNA DERECHA: DATOS DEL ABOGADO Y UBICACIÓN -->
+                <div class="columna derecha">
+                    <div class="form-group">
+                        <label for="noCasoExp">No. Caso:</label>
+                        <input type="text" id="noCasoExp" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="abogado">Abogado:</label>
+                        <select id="abogado" disabled>
+                            <option value="">-- Seleccionar --</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ciudad">Ciudad:</label>
+                        <select id="ciudad" disabled>
+                            <option value="">-- Seleccionar --</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="entidad">Entidad:</label>
+                        <select id="entidad" disabled>
+                            <option value="">-- Seleccionar --</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="impugnacion">Impugnación:</label>
+                        <select id="impugnacion" disabled>
+                            <option value="">-- Seleccionar --</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ÁREA DE SUCESO Y RESULTADO -->
+            <div class="etapa-detalles">
+                <div class="detalles-column">
+                    <label for="suceso">Suceso:</label>
+                    <textarea id="suceso" class="text-editor" disabled placeholder="Doble clic para editar"></textarea>
+                    <div class="nav-arrows">
+                        <button id="btnAnteriorSuceso" class="btn-nav" disabled>◀ Anterior</button>
+                        <button id="btnSiguienteSuceso" class="btn-nav" disabled>Siguiente ▶</button>
+                    </div>
+                </div>
+
+                <div class="detalles-column">
+                    <label for="resultado">Resultado:</label>
+                    <textarea id="resultado" class="text-editor" disabled placeholder="Doble clic para editar"></textarea>
+                    <div class="nav-arrows">
+                        <button id="btnAnteriorResultado" class="btn-nav" disabled>◀ Anterior</button>
+                        <button id="btnSiguienteResultado" class="btn-nav" disabled>Siguiente ▶</button>
+                    </div>
+                </div>
+
+                <!-- DOCUMENTOS Y ACCIONES -->
+                <div class="documentos-acciones">
+                    <div class="documentos-group">
+                        <label>Documentos:</label>
+                        <button id="btnAdjuntarDoc" class="btn-icon" disabled>📎 Adjuntar</button>
+                        <div id="listaDocumentos" class="lista-documentos">
+                            <!-- Se llenará dinámicamente -->
+                        </div>
+                    </div>
+
+                    <div class="acciones-group">
+                        <button id="btnImprimirCaso" class="btn-icon" disabled>🖨️ Imprimir</button>
+                        <button id="btnGuardarExpediente" class="btn-primary" disabled>Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PARA EDITOR DE TEXTO LARGO -->
+    <div id="modalEditor" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modalTitle">Editar Texto</h2>
+            <textarea id="modalTextarea" class="modal-textarea"></textarea>
+            <button id="btnGuardarModal" class="btn-primary">Guardar</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
